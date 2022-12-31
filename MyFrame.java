@@ -36,18 +36,21 @@ public class MyFrame extends JFrame implements ActionListener {
 
     MyFrame() throws FileNotFoundException {
 
-        //file selection
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.showOpenDialog(null);
-        File file = fileChooser.getSelectedFile();
-        Scanner input = new Scanner(file);
+        try {
+            //file selection
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.showOpenDialog(null);
+            File file = fileChooser.getSelectedFile();
+            Scanner input = new Scanner(file);
+            //add all words from file into this List
+            while (input.hasNext()) {
+                words.add(input.nextLine());
+            }
+            input.close();
 
-        //add all words from file into this List
-        while (input.hasNext()) {
-            words.add(input.nextLine());
+        } catch (FileNotFoundException e){
+            throw new FileNotFoundException("The file was not found");
         }
-        input.close();
-
         //creates a random number mechanic
         int random = (int) (Math.random() * words.size());
         hiddenWord = words.get(random).toLowerCase();

@@ -20,9 +20,9 @@ public class MyFrame extends JFrame implements ActionListener {
     static List<Character> playerGuesses = new ArrayList<>();
     static List<Character> dashes = new ArrayList<>();
     static List<String> words = new ArrayList<>();
-    static JLabel aLabel = new JLabel();
-    static JLabel aLabel2 = new JLabel();
-    static JLabel aLabel3 = new JLabel();
+    static JLabel healthLabel = new JLabel();
+    static JLabel incorrectLabel = new JLabel();
+    static JLabel wordLabel = new JLabel();
     static JFormattedTextField aTextField = new JFormattedTextField();
     static String hiddenWord;
     static char firstLetter;
@@ -48,7 +48,7 @@ public class MyFrame extends JFrame implements ActionListener {
             }
             input.close();
 
-        } catch (FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             throw new FileNotFoundException("The file was not found");
         }
         //creates a random number mechanic
@@ -74,46 +74,46 @@ public class MyFrame extends JFrame implements ActionListener {
 
         //ImageIcon
         ImageIcon aImageIcon = new ImageIcon("Hangman" + imageNumber + ".png");
-        aLabel.setIcon(aImageIcon);
-        aLabel.setIconTextGap(200);
+        healthLabel.setIcon(aImageIcon);
+        healthLabel.setIconTextGap(200);
         ImageIcon logo = new ImageIcon("Hangman/logo.png");
         this.setIconImage(logo.getImage());
 
 
         //labels
-        aLabel.setText("<html>Health:" + healthPoints + "<br/> Lets hangout...</html>");//set text
-        aLabel.setForeground(Color.green);//set color of text
-        aLabel.setFont(new Font("Consolas", Font.PLAIN, 30));//set font of text
-        aLabel.setBorder(aBorder);
-        aLabel.setHorizontalTextPosition(JLabel.CENTER);
-        aLabel.setVerticalAlignment(JLabel.TOP);
-        aLabel.setVerticalTextPosition(JLabel.TOP);
-        aLabel.setBounds(0, 0, 400, 800);//sets x,y positions within as well as dimensions
-        this.add(aLabel);
-        aLabel2.setText("<html>Invalid Letters:<br/>" + invalidLetters.toString()//this format is to go to next line
+        healthLabel.setText("<html>Health:" + healthPoints + "<br/> Lets hangout...</html>");//set text
+        healthLabel.setForeground(Color.green);//set color of text
+        healthLabel.setFont(new Font("Consolas", Font.PLAIN, 30));//set font of text
+        healthLabel.setBorder(aBorder);
+        healthLabel.setHorizontalTextPosition(JLabel.CENTER);
+        healthLabel.setVerticalAlignment(JLabel.TOP);
+        healthLabel.setVerticalTextPosition(JLabel.TOP);
+        healthLabel.setBounds(0, 0, 400, 800);//sets x,y positions within as well as dimensions
+        this.add(healthLabel);
+        incorrectLabel.setText("<html>Invalid Letters:<br/>" + invalidLetters.toString()//this format is to go to next line
                 .replace(",", "")                                   //.replace is to make it look neater
                 .replace("[", "")
                 .replace("]", "") +
                 "</html>");
-        aLabel2.setForeground(Color.green);//set color of text
-        aLabel2.setFont(new Font("Consolas", Font.PLAIN, 30));//set font of text
-        aLabel2.setBorder(aBorder);
-        aLabel2.setVerticalAlignment(JLabel.TOP); //move text up
-        aLabel2.setHorizontalAlignment(JLabel.CENTER);
-        aLabel2.setBounds(400, 0, 400, 200);//sets x,y positions within as well as dimensions
-        this.add(aLabel2);
+        incorrectLabel.setForeground(Color.green);//set color of text
+        incorrectLabel.setFont(new Font("Consolas", Font.PLAIN, 30));//set font of text
+        incorrectLabel.setBorder(aBorder);
+        incorrectLabel.setVerticalAlignment(JLabel.TOP); //move text up
+        incorrectLabel.setHorizontalAlignment(JLabel.CENTER);
+        incorrectLabel.setBounds(400, 0, 400, 200);//sets x,y positions within as well as dimensions
+        this.add(incorrectLabel);
         //add dashes for each letter in the hiddenword as well as the size
         for (int i = 0; i < hiddenWord.length(); i++) {
             dashes.add('_');
         }
-        updateALabel3();
-        aLabel3.setForeground(Color.green);//set color of text
-        aLabel3.setFont(new Font("Consolas", Font.PLAIN, 30));//set font of text
-        aLabel3.setBorder(aBorder);
-        aLabel3.setHorizontalAlignment(JLabel.CENTER);
-        aLabel3.setVerticalAlignment(JLabel.BOTTOM);
-        aLabel3.setBounds(400, 200, 400, 200);//sets x,y positions within as well as dimensions
-        this.add(aLabel3);
+        updateWordLabel();
+        wordLabel.setForeground(Color.green);//set color of text
+        wordLabel.setFont(new Font("Consolas", Font.PLAIN, 30));//set font of text
+        wordLabel.setBorder(aBorder);
+        wordLabel.setHorizontalAlignment(JLabel.CENTER);
+        wordLabel.setVerticalAlignment(JLabel.BOTTOM);
+        wordLabel.setBounds(400, 200, 400, 200);//sets x,y positions within as well as dimensions
+        this.add(wordLabel);
 
 
         //text field
@@ -156,7 +156,7 @@ public class MyFrame extends JFrame implements ActionListener {
                 } else {
                     dashes.set(i, hiddenWord.charAt(i));//if user typed one letter, replace all "_" in the correct position with the letter
                 }
-                updateALabel3();//refresh this part of gui
+                updateWordLabel();//refresh this part of gui
 
                 if (compareAnswerToWord()) { // take dashes List and compares with a temp List that has the single hiddenword
                     winningDialog();//plays the situation if you won
@@ -175,8 +175,8 @@ public class MyFrame extends JFrame implements ActionListener {
                 }
 
                 storeWrongLetters(); //store invalidLetters
-                updateALabel(); //refresh life and picture section
-                updateALabel2(); //refresh Invalid Letters section
+                updateHealthLabel(); //refresh life and picture section
+                updateIncorrectLabel(); //refresh Invalid Letters section
                 clearText(); //clears textfield so we dont have to use backspace
             }
             if (healthPoints <= 0) {//when life is 0 we lose and plays the losing situation
@@ -199,13 +199,13 @@ public class MyFrame extends JFrame implements ActionListener {
         aTextField.setText("");
     }
 
-    public static void updateALabel3() { //refresh for dashes List
-        aLabel3.setText(dashes.toString().replace(",", "")
+    public static void updateWordLabel() { //refresh for dashes List
+        wordLabel.setText(dashes.toString().replace(",", "")
                 .replace("[", "")
                 .replace("]", ""));
     }
 
-    public static void updateALabel() {// refresh for pic/life count
+    public static void updateHealthLabel() {// refresh for pic/life count
         Random random = new Random();
 
         List<String> phrase = new ArrayList<>();
@@ -219,9 +219,9 @@ public class MyFrame extends JFrame implements ActionListener {
         int randomNumber = random.nextInt(phrase.size());
 
         if (imageNumber >= 0 && imageNumber <= 6) {
-            aLabel.setText("<html>Health:" + healthPoints + "<br/>" + phrase.get(randomNumber) + "</html>");//html format helps us go to next line
+            healthLabel.setText("<html>Health:" + healthPoints + "<br/>" + phrase.get(randomNumber) + "</html>");//html format helps us go to next line
             aImageIcon = new ImageIcon("Hangman" + imageNumber + ".png");
-            aLabel.setIcon(aImageIcon);
+            healthLabel.setIcon(aImageIcon);
         }
     }
 
@@ -231,8 +231,8 @@ public class MyFrame extends JFrame implements ActionListener {
         }
     }
 
-    public static void updateALabel2() {
-        aLabel2.setText("<html>Invalid Letters:<br/>" + invalidLetters.toString()
+    public static void updateIncorrectLabel() {
+        incorrectLabel.setText("<html>Invalid Letters:<br/>" + invalidLetters.toString()
                 .replace(",", "")
                 .replace("[", "")
                 .replace("]", "") +
@@ -262,9 +262,9 @@ public class MyFrame extends JFrame implements ActionListener {
         for (int i = 0; i < hiddenWord.length(); i++) {
             dashes.add('_');
         }
-        updateALabel();
-        updateALabel2();
-        updateALabel3();
+        updateHealthLabel();
+        updateIncorrectLabel();
+        updateWordLabel();
 
     }
 
